@@ -20,7 +20,7 @@ const db = mysql.createConnection(
 
 //* It's done when the `/api/movies` route renders a list of all movies.
 app.get('/api/movies', (req, res) => {
-    db.query("SELECT movie_name FROM movies", function (err, results) {
+    db.query("SELECT movie_name, id FROM movies", function (err, results) {
         if(results) {
             res.json(results);
         }
@@ -37,19 +37,29 @@ app.post('/api/add-movie', (req, res) => {
         console.log("connected");
         db.query(insert, function (err, result) {
             if (err) throw err;
-            console.log("success")
+            console.log("success");
         });
     });
     res.json("New movie added");
 })
 // * It's done when the `/api/update-review` route successfully updates a movie when tested using Insomnia.
-// app.post('/api/update-review', (req, res) => {
-
-// })
+app.post('/api/update-review', (req, res) => {
+    let movieID = req.body.movieID;
+    let newReview = req.body.review;
+    const insertReview = `INSERT INTO reviews (movie_id, review) VALUES (${movieID}, "${newReview}")`;
+    db.connect(function(err) {
+        if(err) throw err;
+        db.query(insertReview, function (err, result) {
+            if (err) throw err;
+            console.log("success");
+        })
+    });
+    res.json("New review added");
+})
 // * It's done when the `/api/movie/:id` route deletes a route when tested using Insomnia.
-// app.delete('/api/movie/:id', (req, res) => {
-
-// })
+app.delete('/api/movie/:id', (req, res) => {
+    let mID = 
+})
 
 
 
